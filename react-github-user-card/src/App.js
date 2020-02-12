@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 //styles
+import './globalStyles/global.scss';
 
 //components
 import CardCreator from './components/CardCreator/CardCreator';
@@ -13,6 +14,8 @@ class App extends Component{
     isLoading: false,
     searchResults: [],
     searchTerm: '',
+    myFollowersUrl: '',
+    myFollowers: [],
     error: ''
   }
 
@@ -24,11 +27,11 @@ class App extends Component{
     .get('https://api.github.com/users/fuston05')
     .then(res => {
       console.log('res data: ', res.data);
-
       this.setState({
-        users: res.data,
+        users: [res.data],
         error: '',
-        isLoading: false
+        isLoading: false,
+        myFollowersUrl: res.data.followers_url
       })
     })
     .catch(err => {
@@ -41,6 +44,17 @@ class App extends Component{
 
   componentDidUpdate( prevProps, prevState ){
     //always uses 'if' to compare
+    if(prevState.users !== this.state.users){
+      axios
+      .get(this.state.myFollowersUrl)
+      .then(res => {
+        console.log('followers: ', res.data);
+        this.setState({
+          myFollowers: res.data
+        });
+      })
+      .catch(err => {console.log(err);})
+    }
       
 
   }//end update
@@ -63,14 +77,18 @@ class App extends Component{
     return (
       
       <div className="App">
+
+      <h1>Github User Card</h1>
+      {console.log('followers: ', this.state.myFollowers)}
         {/* display errors */}
         <span className= 'error'>{this.state.error}</span>
-        <Search  
-        searchTerm= {this.state.searchTerm}
-        handleSubmit= {this.handleSubmit}
-        handleChange= {this.handleChange}
-        />
-        {this.state.isLoading===true ? <h2>Loading...</h2> : <CardCreator />}
+
+        <Search  />
+
+        {this.state.isLoading===true ? <h2>Loading...</h2> : <CardCreator users= {this.state.users} />}
+
+        {this.state.isLoading===true ? <h2>Loading...</h2> : <CardCreator users= {this.state.myFollowers} />}
+
       </div>
     );//end return
   }//end render
