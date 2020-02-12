@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Card from '../Card/Card';
 
-class CardCreator extends Component{
+class CardCreator extends Component {
 
-  render(){
+  render() {
     return (
       <>
-        {this.props.users.map( (ele) => {
-          return <Card 
-            key= {ele.id}
-            user= {ele}
+        {this.props.users.map((ele) => {
+          return <Card
+            key={ele.id}
+            user={ele}
           />
-        } )}
+        })}
       </>
     );//end return
   }//end render

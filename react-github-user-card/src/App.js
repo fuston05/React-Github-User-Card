@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
 //styles
@@ -8,59 +8,57 @@ import './globalStyles/global.scss';
 import CardCreator from './components/CardCreator/CardCreator';
 import Search from './components/Search/Search';
 
-class App extends Component{
-  state= {
+class App extends Component {
+  state = {
     users: [],
     isLoading: false,
-    searchResults: [],
-    searchTerm: '',
     myFollowersUrl: '',
     myFollowers: [],
-    error: ''
+    error: '',
+    //these states were for the search box if i ever fix it...
+    searchResults: [],
+    searchTerm: ''
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.setState({
       isLoading: true
     });
+    //initial axios call for user on Mount
     axios
-    .get('https://api.github.com/users/fuston05')
-    .then(res => {
-      console.log('res data: ', res.data);
-      this.setState({
-        users: [res.data],
-        error: '',
-        isLoading: false,
-        myFollowersUrl: res.data.followers_url
+      .get('https://api.github.com/users/fuston05')
+      .then(res => {
+        this.setState({
+          users: [res.data],
+          error: '',
+          isLoading: false,
+          myFollowersUrl: res.data.followers_url
+        })
       })
-    })
-    .catch(err => {
-      this.setState({
-        error: err,
-      });
-      console.log('error from state: ', this.state.error);
-    })
+      .catch(err => {
+        this.setState({
+          error: err,
+        });
+        console.log('error from state: ', this.state.error);
+      })
   }//end didMount
 
-  componentDidUpdate( prevProps, prevState ){
-    //always uses 'if' to compare
-    if(prevState.users !== this.state.users){
+  componentDidUpdate(prevProps, prevState) {
+    // if user state changes fetch the followers url for that user
+    if (prevState.users !== this.state.users) {
       axios
-      .get(this.state.myFollowersUrl)
-      .then(res => {
-        console.log('followers: ', res.data);
-        this.setState({
-          myFollowers: res.data
-        });
-      })
-      .catch(err => {console.log(err);})
-    }
-      
-
+        .get(this.state.myFollowersUrl)
+        .then(res => {
+          this.setState({
+            myFollowers: res.data
+          });
+        })
+        .catch(err => { console.log(err); })
+    }//end if
   }//end update
 
   functions
-  handleSubmit= e => {
+  handleSubmit = e => {
     e.preventDefault();
   }//end hendleSubmit
 
@@ -71,24 +69,20 @@ class App extends Component{
   //   });
   // }//end handleChange
 
-
-  render(){
-    
+  render() {
     return (
-      
       <div className="App">
 
-      <h1>Github User Card</h1>
-      {console.log('followers: ', this.state.myFollowers)}
+        <h1>Github User Card</h1>
+
         {/* display errors */}
-        <span className= 'error'>{this.state.error}</span>
+        <span className='error'>{this.state.error}</span>
 
-        <Search  />
+        <Search />
 
-        {this.state.isLoading===true ? <h2>Loading...</h2> : <CardCreator users= {this.state.users} />}
+        {this.state.isLoading === true ? <h2>Loading...</h2> : <CardCreator users={this.state.users} />}
 
-        {this.state.isLoading===true ? <h2>Loading...</h2> : <CardCreator users= {this.state.myFollowers} />}
-
+        {this.state.isLoading === true ? <h2>Loading...</h2> : <CardCreator users={this.state.myFollowers} />}
       </div>
     );//end return
   }//end render

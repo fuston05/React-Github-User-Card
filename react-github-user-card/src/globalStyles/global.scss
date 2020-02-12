@@ -1,14 +1,14 @@
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body{
+body {
   font-size: 62.5%;
 }
 
-.App{
+.App {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,20 +16,21 @@ body{
   padding: 2%;
   background-color: darkgoldenrod;
 
-  a{
+  a {
     font-size: 1.2rem;
 
-    &:hover{
+    &:hover {
       cursor: pointer;
       color: green;
     }
   }
 
-  h1{
+  h1 {
     font-size: 2rem;
   }
 
-  p{
+  p {
     font-size: 1.4rem;
   }
-}
+}//end App
+
